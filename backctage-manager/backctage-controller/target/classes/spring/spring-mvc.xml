@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 开启aop，对类代理 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+    <bean id="redisAspect" class="com.wells.aop.RedisExpirationNoticeAspect"/>
+    <!-- 开启shiro注解支持 -->
+     <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+        <!--<property name="securityManager" ref="securityManager"/>-->
+     <!--</bean>-->
+    <!-- 使用spring组件扫描 -->
+    <context:component-scan base-package="com.wells.controller"/>
+    <!-- 加载配置文件 Spring父子容器,不配controller不能取值 -->
+    <!--<context:property-placeholder location="classpath:properties/*.properties"/>-->
+    <!-- 配置注解驱动 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 配置fastjson支持 -->
+            <bean
+                    class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json</value>
+                    </list>
+                </property>
+                <property name="features">
+                    <list>
+                        <value>WriteMapNullValue</value>
+                        <value>QuoteFieldNames</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--配置多媒体解析器-->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设定默认编码 -->
+        <property name="defaultEncoding" value="UTF-8"></property>
+        <!-- 设定文件上传的最大值50MB，50*1024*1024 -->
+        <property name="maxUploadSize" value="52428800"></property>
+    </bean>
+    <!-- ②：拦截器的配置 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**/*"/>
+            <bean class="com.wells.Interceptor.LoginInfoExceptionInterceptor">
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+        <!-- 后台登录和权限的拦截器配置 -->
+        <!-- <mvc:interceptor>
+             <mvc:mapping path="/sys/*"/>
+             <mvc:mapping path="/sys/**/*"/>
+             <mvc:mapping path="/fmain.action"/>
+             <mvc:exclude-mapping path="/sys/user/login.action"/>
+             <bean class="com.xysz.intercepter.IntercepterAdmin"></bean>
+         </mvc:interceptor>-->
+
+    <!--</mvc:interceptors>-->
+    <!--<bean id="exceptionResolver" class="com.wells.exception.MyExceptionResolver"></bean>-->
+</beans>

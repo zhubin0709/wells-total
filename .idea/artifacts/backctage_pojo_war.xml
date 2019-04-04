@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="backctage-pojo:war">
+    <output-path>$PROJECT_DIR$/backctage-manager/backctage-pojo/target</output-path>
+    <root id="archive" name="backctage-pojo-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="backctage-pojo:war exploded" />
+    </root>
+  </artifact>
+</component>

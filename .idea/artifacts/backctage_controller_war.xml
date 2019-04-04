@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="backctage-controller:war">
+    <output-path>$PROJECT_DIR$/backctage-manager/backctage-controller/target</output-path>
+    <root id="archive" name="backctage-controller-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="backctage-controller:war exploded" />
+    </root>
+  </artifact>
+</component>

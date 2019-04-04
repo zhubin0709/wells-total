@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wells.mapper.SysPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.wells.pojo.SysPermission">
+    <id column="privilege_id" jdbcType="INTEGER" property="privilegeId" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="subject_value" jdbcType="INTEGER" property="subjectValue" />
+    <result column="access" jdbcType="VARCHAR" property="access" />
+    <result column="access_value" jdbcType="INTEGER" property="accessValue" />
+    <result column="operation" jdbcType="INTEGER" property="operation" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    privilege_id, subject, subject_value, access, access_value, operation
+  </sql>
+  <select id="selectByExample" parameterType="com.wells.pojo.SysPermissionCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from sys_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_permission
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_permission
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wells.pojo.SysPermissionCriteria">
+    delete from sys_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wells.pojo.SysPermission">
+    insert into sys_permission (privilege_id, subject, subject_value, 
+      access, access_value, operation
+      )
+    values (#{privilegeId,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, #{subjectValue,jdbcType=INTEGER}, 
+      #{access,jdbcType=VARCHAR}, #{accessValue,jdbcType=INTEGER}, #{operation,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wells.pojo.SysPermission">
+    insert into sys_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="privilegeId != null">
+        privilege_id,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="subjectValue != null">
+        subject_value,
+      </if>
+      <if test="access != null">
+        access,
+      </if>
+      <if test="accessValue != null">
+        access_value,
+      </if>
+      <if test="operation != null">
+        operation,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="privilegeId != null">
+        #{privilegeId,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectValue != null">
+        #{subjectValue,jdbcType=INTEGER},
+      </if>
+      <if test="access != null">
+        #{access,jdbcType=VARCHAR},
+      </if>
+      <if test="accessValue != null">
+        #{accessValue,jdbcType=INTEGER},
+      </if>
+      <if test="operation != null">
+        #{operation,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wells.pojo.SysPermissionCriteria" resultType="java.lang.Long">
+    select count(*) from sys_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_permission
+    <set>
+      <if test="record.privilegeId != null">
+        privilege_id = #{record.privilegeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subject != null">
+        subject = #{record.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subjectValue != null">
+        subject_value = #{record.subjectValue,jdbcType=INTEGER},
+      </if>
+      <if test="record.access != null">
+        access = #{record.access,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessValue != null">
+        access_value = #{record.accessValue,jdbcType=INTEGER},
+      </if>
+      <if test="record.operation != null">
+        operation = #{record.operation,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_permission
+    set privilege_id = #{record.privilegeId,jdbcType=INTEGER},
+      subject = #{record.subject,jdbcType=VARCHAR},
+      subject_value = #{record.subjectValue,jdbcType=INTEGER},
+      access = #{record.access,jdbcType=VARCHAR},
+      access_value = #{record.accessValue,jdbcType=INTEGER},
+      operation = #{record.operation,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wells.pojo.SysPermission">
+    update sys_permission
+    <set>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectValue != null">
+        subject_value = #{subjectValue,jdbcType=INTEGER},
+      </if>
+      <if test="access != null">
+        access = #{access,jdbcType=VARCHAR},
+      </if>
+      <if test="accessValue != null">
+        access_value = #{accessValue,jdbcType=INTEGER},
+      </if>
+      <if test="operation != null">
+        operation = #{operation,jdbcType=INTEGER},
+      </if>
+    </set>
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wells.pojo.SysPermission">
+    update sys_permission
+    set subject = #{subject,jdbcType=VARCHAR},
+      subject_value = #{subjectValue,jdbcType=INTEGER},
+      access = #{access,jdbcType=VARCHAR},
+      access_value = #{accessValue,jdbcType=INTEGER},
+      operation = #{operation,jdbcType=INTEGER}
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.wells.pojo.SysPermissionCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from sys_permission
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

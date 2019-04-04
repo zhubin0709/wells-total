@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="backctage-controller" />
+        <module name="backctage-pojo" />
+        <module name="backctage-service" />
+        <module name="common-interface-utils" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="backctage-controller" target="1.8" />
+      <module name="backctage-manager" target="1.5" />
+      <module name="backctage-pojo" target="1.5" />
+      <module name="backctage-service" target="1.8" />
+      <module name="common-interface-utils" target="1.6" />
+      <module name="wells-parent" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 动态filterChainDefinitions参考：http://blog.csdn.net/z971829916/article/details/22572587 -->
+        <property name="filterChainDefinitionMap" ref="chainDefinitionSectionMetaSource" />
+        <property name="filters">
+            <map>
+                <entry key="jwtAuthcFilter">
+                    <bean class="com.wells.shiro.JwtAuthcFilter" />
+                </entry>
+                <entry key="restfulPermissionFilter">
+                    <bean  class="com.wells.shiro.RestfulPermissionFilter" />
+                </entry>
+            </map>
+        </property>
+
+    </bean>
+    <bean id="chainDefinitionSectionMetaSource" class="com.wells.shiro.ChainDefinitionSectionMetaSource">
+        <property name="filterChainDefinitions">
+            <value>
+                / = anon
+                /token = anon
+                /logout = anon
+            </value>
+        </property>
+    </bean>
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="JwtRealm" />
+        <property name="subjectDAO" ref="subjectDAO"/>
+        <property name="subjectFactory" ref="jwtDefaultSubjectFactory" />
+        <property name="sessionManager" ref="sessionManager" />
+    </bean>
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <!-- Realm实现 -->
+    <bean id="JwtRealm" class="com.wells.shiro.JwtRealm">
+        <property name="cachingEnabled" value="false"/>
+    </bean>
+    <!--解决报错，组装默认的subjectDAO-->
+    <bean id="subjectDAO" class="org.apache.shiro.mgt.DefaultSubjectDAO">
+        <property name="sessionStorageEvaluator" ref="sessionStorageEvaluator"/>
+    </bean>
+    <bean id="sessionStorageEvaluator" class="org.apache.shiro.mgt.DefaultSessionStorageEvaluator">
+        <property name="sessionStorageEnabled" value="false"/>
+    </bean>
+    <!-- Subject工厂（不创建session） -->
+    <bean id="jwtDefaultSubjectFactory" class="com.wells.shiro.JwtDefaultSubjectFactory"/>
+    <!-- 会话管理器 -->
+    <bean id="sessionManager" class="org.apache.shiro.session.mgt.DefaultSessionManager">
+        <property name="sessionValidationSchedulerEnabled" value="false"/>
+    </bean>
+    <!-- Shiro生命周期处理器 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>

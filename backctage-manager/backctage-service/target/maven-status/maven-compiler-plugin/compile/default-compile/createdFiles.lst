@@ -1,0 +1,17 @@
+com\wells\mapper\SysDeptMapper.class
+com\wells\mapper\SysLoginLogMapper.class
+com\wells\mapper\SysMenuMapper.class
+com\wells\mapper\SysButtonMapper.class
+com\wells\mapper\SysOperLogMapper.class
+com\wells\mapper\SysModelMapper.class
+com\wells\mapper\custom\ResourceMapper.class
+com\wells\mapper\SysUserMapper.class
+com\wells\service\impl\system\SysUserServiceImpl.class
+com\wells\mapper\SysPermissionMapper.class
+com\wells\mapper\SysPostMapper.class
+com\wells\mapper\SysUserOnlineMapper.class
+com\wells\mapper\SysUserPostMapper.class
+com\wells\mapper\SysUserRoleMapper.class
+com\wells\service\impl\system\SysLoginLogServiceImpl.class
+com\wells\mapper\SysRoleMapper.class
+com\wells\service\impl\system\custom\ResourceServiceImpl.class

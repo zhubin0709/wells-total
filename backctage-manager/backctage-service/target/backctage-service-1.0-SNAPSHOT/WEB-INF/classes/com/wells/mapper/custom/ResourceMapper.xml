@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wells.mapper.custom.ResourceMapper">
+    <resultMap id="BaseResultMap" type="com.wells.pojo.SysMenu">
+        <id column="menu_Id" jdbcType="INTEGER" property="menuId" />
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+        <result column="level" jdbcType="VARCHAR" property="level" />
+        <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="isvisible" jdbcType="INTEGER" property="isvisible" />
+        <result column="perms" jdbcType="VARCHAR" property="perms" />
+        <result column="menu_order" jdbcType="INTEGER" property="menuOrder" />
+        <result column="model_id" jdbcType="INTEGER" property="modelId" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+    <select id="listResource" resultType="java.lang.String">
+         SELECT url FROM sys_menu
+    </select>
+    <select id="listPermissionCodeByUserId" resultType="java.lang.String">
+            SELECT perms FROM sys_menu s
+            INNER JOIN
+            (SELECT *  FROM sys_permission WHERE privilege_id IN(
+             SELECT privilege_id FROM sys_permission WHERE SUBJECT = 'user' AND operation=0 AND subject_value=#{userId} UNION ALL
+             SELECT privilege_id FROM sys_permission WHERE SUBJECT = 'role' AND operation=0 AND subject_value IN(SELECT  role_id FROM sys_user_role WHERE user_id=#{userId}) UNION ALL
+             SELECT privilege_id FROM sys_permission WHERE SUBJECT = 'dept' AND operation=0 AND subject_value =(SELECT dept_id FROM sys_user WHERE user_id=#{userId})
+            )
+             )  p ON s.`menu_Id`=p.`access_value`
+    </select>
+
+    <select id="listAuthorizedRouter"  resultMap="BaseResultMap">
+        SELECT s.* FROM sys_menu s
+        INNER JOIN
+        (SELECT *  FROM sys_permission WHERE privilege_id IN(
+        SELECT privilege_id FROM sys_permission WHERE SUBJECT = 'user' AND operation=0 AND subject_value=#{userId} UNION ALL
+        SELECT privilege_id FROM sys_permission WHERE SUBJECT = 'role' AND operation=0 AND subject_value IN(SELECT  role_id FROM sys_user_role WHERE user_id=#{userId}) UNION ALL
+        SELECT privilege_id FROM sys_permission WHERE SUBJECT = 'dept' AND operation=0 AND subject_value =(SELECT dept_id FROM sys_user WHERE user_id=#{userId})
+        )
+        )  p ON s.`menu_Id`=p.`access_value`
+    </select>
+</mapper>

@@ -1,0 +1,16 @@
+com\wells\shiro\RestfulPermissionFilter.class
+com\wells\shiro\JwtAuthcFilter.class
+com\wells\controller\CaptchaController.class
+com\wells\controller\sys\UserController.class
+com\wells\controller\BaseController.class
+com\wells\controller\sys\loginController.class
+com\wells\aop\RedisExpirationNoticeAspect.class
+com\wells\shiro\JwtToken.class
+com\wells\shiro\ChainDefinitionSectionMetaSource.class
+com\wells\xss\XssHttpServletRequestWrapper.class
+com\wells\shiro\JwtDefaultSubjectFactory.class
+com\wells\shiro\JwtRealm.class
+com\wells\shiro\Test.class
+com\wells\Interceptor\LoginInfoExceptionInterceptor.class
+com\wells\xss\XssFilter.class
+com\wells\aop\RedisAspect.class
