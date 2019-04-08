@@ -4,14 +4,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPoolConfig;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by zb on 2019/2/15
@@ -96,12 +99,58 @@ private static String id="jwt";
 //        //设置 redis 字符串数据
 //        // 获取存储的数据并输出
 //        System.out.println("redis 存储的字符串为: "+ jedis.get("runoobkey"));
-            ClassPathXmlApplicationContext appCtx = new ClassPathXmlApplicationContext("/spring/applicationContext-redis.xml");
-             RedisTemplate<String, Object> redisTemplate = appCtx.getBean("redisTemplate", RedisTemplate.class);
-            //添加一个 key
-            ValueOperations<String, Object> value = redisTemplate.opsForValue();
-            value.set("lp", "hello word");
-            //获取 这个 key 的值
-            System.out.println(value.get("lp"));
+//            ClassPathXmlApplicationContext appCtx = new ClassPathXmlApplicationContext("/spring/applicationContext-redis.xml");
+//             RedisTemplate<String, Object> redisTemplate = appCtx.getBean("redisTemplate", RedisTemplate.class);
+//            //添加一个 key
+//            ValueOperations<String, Object> value = redisTemplate.opsForValue();
+//            value.set("lp", "hello word");
+//            //获取 这个 key 的值
+//            System.out.println(value.get("lp"));
+
+        //初始化集合，用于装下面的多个主机和端口
+        HashSet<HostAndPort> nodes = new HashSet<HostAndPort>();
+
+        //创建多个主机和端口实例
+        HostAndPort hostAndPort = new HostAndPort("39.97.169.123", 7001);
+        HostAndPort hostAndPort1 = new HostAndPort("39.97.169.123", 7002);
+        HostAndPort hostAndPort2 = new HostAndPort("39.97.169.123", 7003);
+        HostAndPort hostAndPort3 = new HostAndPort("39.97.169.123", 7004);
+        HostAndPort hostAndPort4 = new HostAndPort("39.97.169.123", 7005);
+        HostAndPort hostAndPort5 = new HostAndPort("39.97.169.123", 7006);
+
+        //添加多个主机和端口到集合中
+        nodes.add(hostAndPort);
+        nodes.add(hostAndPort1);
+        nodes.add(hostAndPort2);
+        nodes.add(hostAndPort3);
+        nodes.add(hostAndPort4);
+        nodes.add(hostAndPort5);
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+
+        poolConfig.setMaxTotal(30);
+        poolConfig.setMaxIdle(10);
+        poolConfig.setNumTestsPerEvictionRun(1024);
+        poolConfig.setTimeBetweenEvictionRunsMillis(30000);
+        poolConfig.setMinEvictableIdleTimeMillis(1800000);
+        poolConfig.setSoftMinEvictableIdleTimeMillis(10000);
+        poolConfig.setMaxWaitMillis(3000);
+        poolConfig.setTestWhileIdle(true);
+        poolConfig.setTestOnBorrow(true);
+        poolConfig.setBlockWhenExhausted(false);
+        JedisCluster jedis = new JedisCluster(nodes,4000,1000,2,"123456",poolConfig);
+
+//        // 添加一条
+//        jedis.hset("goodsInfo", "goodsName", "403-超级手机");
+//        // 获取一条
+//        String goodsName = jedis.hget("goodsInfo", "goodsName");
+//        System.out.println("商品名称" + goodsName);
+
+        Map<String, String> hash = new HashMap<String, String>();
+        hash.put("orderSn", "20171226122301");
+        hash.put("orderStatus", "提交预订单");
+
+        // 添加多条
+        jedis.hmset("orderInfo", hash);
+        System.out.println("---------------");
     }
 }
